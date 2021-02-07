@@ -1,5 +1,8 @@
 import { app, BrowserWindow } from "electron";
+import log from "electron-log";
 import * as path from "path";
+import settings from "./settings";
+import updater from "./updater";
 
 let mainWindow: BrowserWindow
 
@@ -7,17 +10,23 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true,
+      webSecurity: false
     },
     width: 800,
   });
 
   mainWindow.loadFile(path.join(__dirname, "../index.html"));
+  mainWindow.loadURL(settings.url)
 }
 
-app.on("ready", () => {
+app.on("ready", async () => {
+  //判断更新
+  await updater.checkUpdate();
+  //读取配置文件
+  await settings.load();
+  //启动程序
   createWindow();
-
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });

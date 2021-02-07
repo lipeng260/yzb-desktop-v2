@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>设置硬件编号</title>
+</head>
+<body>
+  <form id="settings">
+    请输入硬件编号: <input type="text" id="ProductKey" value=""><br>
+    请输入硬件编号: <input type="text" id="DeviceName" value=""><br>
+    请输入硬件编号: <input type="text" id="DeviceSecret" value=""><br>
+    <input type="button" value="提交" onclick="saveProductKey()">
+  </form>
+  <div id="messages"></div>
+<script>
+const {ipcRenderer} = require('electron');
+
+function saveProductKey() {
+  const ProductKey = document.getElementById('ProductKey').value
+  const DeviceName = document.getElementById('DeviceName').value
+  const DeviceSecret = document.getElementById('DeviceSecret').value
+  // remote.getCurrentWindow().emit('settings', ProductKey, DeviceName, DeviceSecret)
+  ipcRenderer.send('settings-message', ProductKey, DeviceName, DeviceSecret)
+}
+</script>
+</body>
+</html>

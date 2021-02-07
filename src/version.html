@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>云智磅更新</title>
+</head>
+<body>
+  Current version: <span id="version">vX.Y.Z</span>
+  <div id="messages"></div>
+<script>
+  const {ipcRenderer, remote} = require('electron');
+  const package = remote.require("./package.json");
+  document.getElementById('version').innerText = package.version;
+  ipcRenderer.on('updatemessage', function(event, text) {
+    var container = document.getElementById('messages');
+    var message = document.createElement('div');
+    message.innerHTML = text;
+    container.appendChild(message);
+  })
+</script>
+</body>
+</html>
